@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(npm install *)",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(disown)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/products)",
+      "Bash(curl -s http://localhost:3000/api/products)",
+      "WebFetch(domain:omgs.in)",
+      "Bash(grep -iE \"^\\(sticker|magnet|key|image|album|signpost|frame|book-image|images|map-pin|smartphone|credit-card|banknote|lock|check-circle|shopping-cart|search|phone|mail|star\\)\\\\.js$\")",
+      "Bash(grep -iE \"^\\(camera|package|layers|mouse-pointer-click|shopping-bag|check\\)\\\\.js$\")",
+      "Bash(grep -iE \"^\\(check-circle-2|check-circle|lock|party-popper\\)\\\\.js$\")",
+      "Bash(grep -iE \"^\\(phone|mail\\)\\\\.js$\")",
+      "Bash(grep -iE \"^\\(pencil|refresh-ccw\\)\\\\.js$\")",
+      "Bash(npx tsc *)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(npx playwright *)",
+      "Bash(node \"/private/tmp/claude-501/-Users-shivam-Desktop-Project-Maa-Stickers/11cf752c-50fd-44fb-b090-0d7e9b4d5876/scratchpad/verify.mjs\")",
+      "Bash(npm init *)",
+      "Bash(node verify.mjs)",
+      "Bash(node -e ' *)",
+      "Bash(sed -i '' 's/const pngBase64 = .*/\\\\/\\\\/ using pre-generated colorful test image/; /fs.writeFileSync\\(testImgPath/d' verify.mjs)",
+      "Bash(node verify2.mjs)",
+      "Bash(rm -rf .next)"
+    ]
+  }
+}

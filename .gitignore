@@ -1,0 +1,26 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# env files hold secrets: never commit them (.env.example is the template)
+.env
+.env*.local
+.env.production
+.env.example
+
+# local database and customer uploads
+/prisma/*.db
+/prisma/*.db-journal
+/public/uploads/
+
+# archives and OS / editor junk
+*.zip
+.DS_Store
+npm-debug.log*
+.vercel
+.claude/settings.local.json
