@@ -8,7 +8,7 @@ export const metadata = {
 };
 
 const EMAIL = "hello@printsbazar.in";
-const PHONE = "+91 98356 74095";
+const PHONE = "+91 8969179285";
 
 // Courier transit times by region. Keep in line with ZONE_MAP in /api/delivery-estimate.
 const TRANSIT = [
@@ -164,7 +164,7 @@ const SECTIONS: LegalSection[] = [
         <p>We&apos;re here to help, Monday to Saturday, 9 AM – 7 PM:</p>
         <ul>
           <li>
-            WhatsApp / Phone: <a href="https://wa.me/919835674095">{PHONE}</a>
+            WhatsApp / Phone: <a href="https://wa.me/918969179285">{PHONE}</a>
           </li>
           <li>
             Email: <a href={`mailto:${EMAIL}`}>{EMAIL}</a>

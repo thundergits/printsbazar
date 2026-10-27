@@ -2,8 +2,8 @@ import { createTransport, type Transporter } from "nodemailer";
 
 const BRAND = process.env.NEXT_PUBLIC_SITE_NAME || "PrintsBazar";
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
-const SUPPORT_PHONE = "+91 98356 74095";
-const WHATSAPP_URL = "https://wa.me/919835674095";
+const SUPPORT_PHONE = "+91 8969179285";
+const WHATSAPP_URL = "https://wa.me/918969179285";
 
 const GOLD = "#b8860b";
 const INK = "#1c1917";

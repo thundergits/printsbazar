@@ -56,7 +56,7 @@ export default function FaqPage() {
           <p className="text-gray-500 mb-6">We&apos;re happy to help, Monday to Saturday, 9 AM – 7 PM.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
             <a
-              href="https://wa.me/919835674095"
+              href="https://wa.me/918969179285"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-3 rounded-xl transition-colors"
@@ -64,10 +64,10 @@ export default function FaqPage() {
               <MessageCircle className="w-5 h-5" /> Chat on WhatsApp
             </a>
             <a
-              href="tel:+919835674095"
+              href="tel:+918969179285"
               className="inline-flex items-center justify-center gap-2 bg-white border border-gray-200 text-gray-700 font-semibold px-5 py-3 rounded-xl hover:border-brand-300 transition-colors"
             >
-              <Phone className="w-4 h-4" /> +91 98356 74095
+              <Phone className="w-4 h-4" /> +91 8969179285
             </a>
             <a
               href="mailto:hello@printsbazar.in"

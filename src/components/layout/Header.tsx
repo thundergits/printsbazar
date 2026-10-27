@@ -38,7 +38,7 @@ export default function Header({ user }: HeaderProps) {
         <Truck className="w-3.5 h-3.5 inline" /> Free shipping on orders above ₹499 | Made in India
         <span className="mx-3">|</span>
         <a href="tel:+919876543210" className="underline hover:no-underline inline-flex items-center gap-1">
-          <Phone className="w-3 h-3" /> +91 98765 43210
+          <Phone className="w-3 h-3" /> +91 89691 79285
         </a>
       </div>
 

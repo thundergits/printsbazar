@@ -8,7 +8,7 @@ export const metadata = {
 };
 
 const EMAIL = "hello@printsbazar.in";
-const PHONE = "+91 98356 74095";
+const PHONE = "+91 8969179285";
 
 const SECTIONS: LegalSection[] = [
   {
@@ -80,7 +80,7 @@ const SECTIONS: LegalSection[] = [
       <>
         <ul>
           <li>
-            <strong>Contact us within 7 days of delivery</strong> on WhatsApp at <a href="https://wa.me/919835674095">{PHONE}</a>{" "}
+            <strong>Contact us within 7 days of delivery</strong> on WhatsApp at <a href="https://wa.me/918969179285">{PHONE}</a>{" "}
             or by email at <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
           </li>
           <li>
@@ -188,7 +188,7 @@ const SECTIONS: LegalSection[] = [
         <p>We&apos;re happy to help with any return, reprint or refund question:</p>
         <ul>
           <li>
-            WhatsApp / Phone: <a href="https://wa.me/919835674095">{PHONE}</a> (Monday–Saturday, 9 AM – 7 PM)
+            WhatsApp / Phone: <a href="https://wa.me/918969179285">{PHONE}</a> (Monday–Saturday, 9 AM – 7 PM)
           </li>
           <li>
             Email: <a href={`mailto:${EMAIL}`}>{EMAIL}</a>

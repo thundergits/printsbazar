@@ -7,7 +7,7 @@ export const metadata = {
 };
 
 const EMAIL = "hello@printsbazar.in";
-const PHONE = "+91 98356 74095";
+const PHONE = "+91 8969179285";
 const ADDRESS = "C.R. Complex, R.K. Bhattacharya Road, Patna – 800001, Bihar, India";
 
 const SECTIONS: LegalSection[] = [
@@ -275,7 +275,7 @@ const SECTIONS: LegalSection[] = [
             Email: <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
           </li>
           <li>
-            Phone / WhatsApp: <a href="tel:+919835674095">{PHONE}</a> (Monday–Saturday, 9 AM – 7 PM)
+            Phone / WhatsApp: <a href="tel:+918969179285">{PHONE}</a> (Monday–Saturday, 9 AM – 7 PM)
           </li>
           <li>Address: {ADDRESS}</li>
         </ul>

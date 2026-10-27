@@ -47,9 +47,9 @@ export default function Footer() {
               Gifts change. Memories remain. Custom prints, photo gifts & signage crafted with love, across India.
             </p>
             <div className="space-y-2 text-sm">
-              <a href="tel:+919835674095" className="flex items-center gap-2 hover:text-brand-400 transition-colors">
+              <a href="tel:+918969179285" className="flex items-center gap-2 hover:text-brand-400 transition-colors">
                 <Phone className="w-4 h-4 text-brand-500 flex-shrink-0" />
-                +91 98356 74095
+                +91 8969179285
               </a>
               <a href="mailto:hello@printsbazar.in" className="flex items-center gap-2 hover:text-brand-400 transition-colors">
                 <Mail className="w-4 h-4 text-brand-500 flex-shrink-0" />

@@ -7,7 +7,7 @@ export const metadata = {
 };
 
 const CONTACT_INFO = [
-  { icon: Phone, label: "Phone / WhatsApp", value: "+91 98356 74095", href: "tel:+919835674095", sub: "Mon–Sat, 9am–7pm" },
+  { icon: Phone, label: "Phone / WhatsApp", value: "+91 8969179285", href: "tel:+918969179285", sub: "Mon–Sat, 9am–7pm" },
   { icon: Mail, label: "Email", value: "hello@printsbazar.in", href: "mailto:hello@printsbazar.in", sub: "Reply within 24 hours" },
   {
     icon: MapPin,
@@ -55,7 +55,7 @@ export default function ContactPage() {
             })}
 
             <a
-              href="https://wa.me/919835674095"
+              href="https://wa.me/918969179285"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-xl transition-colors"
