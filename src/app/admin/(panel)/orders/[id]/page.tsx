@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft, Archive, CheckCircle, Package, Palette, Printer, Truck, Clock, X, Phone, Mail } from "lucide-react";
+import { ArrowLeft, Archive, CheckCircle, ChevronLeft, ChevronRight, Download, Package, Palette, Printer, Truck, Clock, X, Phone, Mail } from "lucide-react";
 import { formatPrice, cn } from "@/lib/utils";
 import { parseCustomization } from "@/lib/customization";
 import toast from "react-hot-toast";
@@ -25,12 +25,65 @@ interface OrderDetail {
   }>;
 }
 
+interface ViewerImage { src: string; label: string; }
+
+/** Full-screen view of an order item's images, with arrow-key / button navigation */
+function ImageViewer({ images, index, onChange, onClose }: {
+  images: ViewerImage[]; index: number; onChange: (index: number) => void; onClose: () => void;
+}) {
+  const current = images[index];
+  const go = (step: number) => onChange((index + step + images.length) % images.length);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") go(1);
+      if (e.key === "ArrowLeft") go(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/90 flex flex-col" onClick={onClose}>
+      <div className="flex items-center justify-between px-5 py-3 text-white" onClick={(e) => e.stopPropagation()}>
+        <p className="text-sm font-medium">
+          {current.label}
+          {images.length > 1 && <span className="text-gray-400 ml-2">{index + 1} / {images.length}</span>}
+        </p>
+        <div className="flex items-center gap-4">
+          <a href={current.src} target="_blank" rel="noopener noreferrer" download className="flex items-center gap-1.5 text-sm text-brand-400 hover:text-brand-300">
+            <Download className="w-4 h-4" /> Download
+          </a>
+          <button onClick={onClose} className="text-gray-400 hover:text-white" title="Close (Esc)">
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+      </div>
+      <div className="relative flex-1 m-4 mt-0">
+        <Image src={current.src} alt={current.label} fill unoptimized className="object-contain" sizes="100vw" />
+        {images.length > 1 && (
+          <>
+            <button onClick={(e) => { e.stopPropagation(); go(-1); }} className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-gray-900/80 text-white hover:bg-gray-800" title="Previous">
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button onClick={(e) => { e.stopPropagation(); go(1); }} className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-gray-900/80 text-white hover:bg-gray-800" title="Next">
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function OrderDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const [order, setOrder] = useState<OrderDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [viewer, setViewer] = useState<{ images: ViewerImage[]; index: number } | null>(null);
 
   useEffect(() => {
     fetch(`/api/admin/orders/${id}`)
@@ -102,6 +155,8 @@ export default function OrderDetailPage() {
 
   return (
     <div className="space-y-5 max-w-4xl">
+      {viewer && <ImageViewer {...viewer} onChange={(index) => setViewer({ ...viewer, index })} onClose={() => setViewer(null)} />}
+
       {/* Back + header */}
       <div className="flex items-center gap-3">
         <button onClick={() => router.back()} className="text-gray-400 hover:text-white transition-colors">
@@ -131,17 +186,37 @@ export default function OrderDetailPage() {
             <div className="divide-y divide-gray-800">
               {order.items.map((item) => {
                 const { frameName, note, photos, texts, font, clock, printUrl } = parseCustomization(item.customization);
+                const images: ViewerImage[] = [
+                  ...(item.uploadedImage ? [{ src: item.uploadedImage, label: "Customer preview" }] : []),
+                  ...photos.map((photo, i) => ({
+                    src: photo.originalUrl,
+                    label: photos.length > 1 ? `Original photo ${i + 1}` : "Original photo",
+                  })),
+                  ...(printUrl ? [{ src: printUrl, label: "Print artwork" }] : []),
+                ];
                 return (
-                <div key={item.id} className="flex gap-4 px-5 py-4">
-                  <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-800 flex-shrink-0">
+                <div key={item.id} className="px-5 py-4">
+                <div className="flex gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setViewer({ images: images.length ? images : [{ src: item.productImage, label: item.productName }], index: 0 })}
+                    className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-800 flex-shrink-0 hover:ring-2 hover:ring-brand-500 transition"
+                    title="View image"
+                  >
+                    {images.length > 1 && (
+                      <span className="absolute bottom-1 right-1 z-10 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-black/70 text-white">
+                        +{images.length - 1}
+                      </span>
+                    )}
                     <Image
                       src={item.uploadedImage || item.productImage}
                       alt={item.productName}
                       fill
+                      unoptimized
                       className={item.uploadedImage ? "object-contain bg-white" : "object-cover"}
-                      sizes="64px"
+                      sizes="80px"
                     />
-                  </div>
+                  </button>
                   <div className="flex-1 min-w-0">
                     <p className="text-white font-medium text-sm">{item.productName}</p>
                     {item.variantInfo && <p className="text-gray-400 text-xs mt-0.5">{item.variantInfo}</p>}
@@ -192,6 +267,7 @@ export default function OrderDetailPage() {
                     <p className="text-white font-semibold">{formatPrice(item.price * item.quantity)}</p>
                     <p className="text-gray-400 text-xs">× {item.quantity} @ {formatPrice(item.price)}</p>
                   </div>
+                </div>
                 </div>
                 );
               })}

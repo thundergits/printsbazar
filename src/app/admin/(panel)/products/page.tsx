@@ -355,7 +355,8 @@ export default function AdminProductsPage() {
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
                         <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-gray-800 flex-shrink-0">
-                          <Image src={p.imageUrl} alt={p.name} fill className="object-cover" sizes="48px" />
+                          {/* unoptimized: a product saved with an image host missing from next.config must not crash the admin table */}
+                          <Image src={p.imageUrl} alt={p.name} fill unoptimized className="object-cover" sizes="48px" />
                         </div>
                         <div className="min-w-0">
                           {editingId === p.id ? (

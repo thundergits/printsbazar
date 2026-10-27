@@ -99,10 +99,14 @@ function OrdersContent() {
               <tbody className="divide-y divide-gray-800">
                 {filtered.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-800/40 transition-colors">
-                    <td className="px-5 py-4 font-mono text-brand-400 font-medium whitespace-nowrap">{order.orderNumber}</td>
+                    <td className="px-5 py-4 font-mono text-brand-400 font-medium whitespace-nowrap">
+                      <Link href={`/admin/orders/${order.id}`} className="hover:underline">{order.orderNumber}</Link>
+                    </td>
                     <td className="px-5 py-4">
-                      <p className="text-white font-medium">{order.guestName || "—"}</p>
-                      <p className="text-gray-500 text-xs">{order.guestEmail}</p>
+                      <Link href={`/admin/orders/${order.id}`} className="group block">
+                        <p className="text-white font-medium group-hover:text-brand-400 group-hover:underline">{order.guestName || "—"}</p>
+                        <p className="text-gray-500 text-xs">{order.guestEmail}</p>
+                      </Link>
                     </td>
                     <td className="px-5 py-4 text-gray-300">
                       {order.items[0]?.productName}

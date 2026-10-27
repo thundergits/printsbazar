@@ -5,6 +5,7 @@ import type { NextConfig } from "next";
 // Add more (comma-separated) with IMAGE_HOSTS if product images live elsewhere.
 const imageHosts = [
   "res.cloudinary.com",
+  "ik.imagekit.io",
   ...(process.env.IMAGE_HOSTS?.split(",").map((h) => h.trim()).filter(Boolean) ?? []),
 ];
 
