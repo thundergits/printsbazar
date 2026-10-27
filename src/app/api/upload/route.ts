@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
-import { v4 as uuidv4 } from "uuid";
 import sharp from "sharp";
 import { jsonError } from "@/lib/api";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
+import { storeImage, cloudinaryEnabled } from "@/lib/storage";
 
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const EXTENSIONS: Record<string, string> = { jpeg: "jpg", png: "png", webp: "webp" };
@@ -20,8 +17,7 @@ export async function POST(req: NextRequest) {
   const limited = rateLimit(`upload:${clientIp(req)}`, 40, 10 * 60 * 1000);
   if (limited) return limited;
 
-  const useCloudinary = Boolean(process.env.CLOUDINARY_URL);
-  if (!useCloudinary && process.env.NODE_ENV === "production") {
+  if (!cloudinaryEnabled() && process.env.NODE_ENV === "production") {
     // Local disk is lost on redeploy and isn't served after `next build`
     console.error("CLOUDINARY_URL is not set; uploads are disabled in production");
     return jsonError("Photo uploads are temporarily unavailable. Please try again later.", 503);
@@ -76,32 +72,8 @@ export async function POST(req: NextRequest) {
     }
     // ─────────────────────────────────────────────────────────────────────────
 
-    if (useCloudinary) {
-      const { v2: cloudinary } = await import("cloudinary");
-      // CLOUDINARY_URL env is automatically picked up by the SDK
-      const uploadResult = await new Promise<{ secure_url: string }>((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          {
-            folder: "maa-stickers/uploads",
-            resource_type: "image",
-            transformation: [{ quality: "auto:best" }],
-          },
-          (err, result) => {
-            if (err || !result) reject(err);
-            else resolve(result as { secure_url: string });
-          }
-        );
-        uploadStream.end(buffer);
-      });
-      return NextResponse.json({ url: uploadResult.secure_url });
-    }
-
-    // ── Local file storage (development only) ────────────────────────────────
-    const filename = `${uuidv4()}.${ext}`;
-    await mkdir(UPLOAD_DIR, { recursive: true });
-    await writeFile(path.join(UPLOAD_DIR, filename), buffer);
-
-    return NextResponse.json({ url: `/uploads/${filename}` });
+    const url = await storeImage(buffer, ext, "maa-stickers/uploads");
+    return NextResponse.json({ url });
   } catch (err) {
     console.error("Upload failed:", err);
     return jsonError("Upload failed. Please try again.", 500);

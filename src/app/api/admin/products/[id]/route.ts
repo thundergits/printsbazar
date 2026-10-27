@@ -94,7 +94,7 @@ export async function DELETE(
   const { id } = await params;
   try {
     // Soft delete: past orders still reference the product
-    await prisma.product.update({ where: { id }, data: { isActive: false } });
+    await prisma.product.update({ where: { id }, data: { isActive: false, deletedAt: new Date() } });
     return NextResponse.json({ ok: true });
   } catch (err) {
     if (isPrismaError(err, "P2025")) return jsonError("Product not found", 404);

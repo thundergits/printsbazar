@@ -29,7 +29,10 @@ export async function GET(req: NextRequest) {
   const search = searchParams.get("search")?.slice(0, 100) || undefined;
 
   const products = await prisma.product.findMany({
-    where: search ? { name: { contains: search, mode: "insensitive" } } : undefined,
+    where: {
+      deletedAt: null,
+      ...(search ? { name: { contains: search, mode: "insensitive" } } : {}),
+    },
     include: { category: true, variants: true },
     orderBy: { createdAt: "desc" },
   });

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Search, Plus, Pencil, Trash2, ToggleLeft, ToggleRight, X, Check, Star, Layers } from "lucide-react";
+import { Search, Plus, Pencil, Trash2, ToggleLeft, ToggleRight, X, Check, Star, Layers, Upload } from "lucide-react";
 import { formatPrice, cn, slugify } from "@/lib/utils";
 import toast from "react-hot-toast";
 
@@ -34,6 +34,24 @@ export default function AdminProductsPage() {
     imageUrl: "", categoryId: "", isCustomizable: true, isFeatured: false,
   });
   const [addLoading, setAddLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const uploadImage = async (file: File) => {
+    setUploading(true);
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/api/admin/upload", { method: "POST", body: form });
+      const data = await res.json();
+      if (!res.ok) { toast.error(data.error || "Upload failed"); return; }
+      setNewProduct(p => ({ ...p, imageUrl: data.url }));
+      toast.success("Image uploaded");
+    } catch {
+      toast.error("Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const fetch_ = (q?: string) => {
     setLoading(true);
@@ -214,6 +232,17 @@ export default function AdminProductsPage() {
                   onChange={e => setNewProduct(p => ({ ...p, [key]: e.target.value }))}
                   className="w-full px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 transition-colors"
                 />
+                {key === "imageUrl" && (
+                  <label className={cn("mt-2 inline-flex items-center gap-2 text-xs font-medium text-brand-400 hover:text-brand-300 cursor-pointer", uploading && "opacity-60 pointer-events-none")}>
+                    <Upload className="w-3.5 h-3.5" /> {uploading ? "Uploading…" : "Upload image"}
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      className="hidden"
+                      onChange={e => { const f = e.target.files?.[0]; if (f) uploadImage(f); e.target.value = ""; }}
+                    />
+                  </label>
+                )}
               </div>
             ))}
             <div>
@@ -252,7 +281,7 @@ export default function AdminProductsPage() {
             </div>
           </div>
           <div className="flex gap-3 mt-5">
-            <button onClick={addProduct} disabled={addLoading}
+            <button onClick={addProduct} disabled={addLoading || uploading}
               className="flex items-center gap-2 px-5 py-2.5 bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold rounded-xl transition-colors disabled:opacity-60">
               {addLoading ? "Adding…" : <><Check className="w-4 h-4" /> Add Product</>}
             </button>
@@ -434,7 +463,8 @@ export default function AdminProductsPage() {
                             <button
                               onClick={async () => {
                                 if (!confirm(`Delete "${p.name}"?`)) return;
-                                await fetch(`/api/admin/products/${p.id}`, { method: "DELETE" });
+                                const res = await fetch(`/api/admin/products/${p.id}`, { method: "DELETE" });
+                                if (!res.ok) { toast.error("Failed to delete product"); return; }
                                 setProducts(prev => prev.filter(x => x.id !== p.id));
                                 toast.success("Product deleted");
                               }}
