@@ -2,9 +2,9 @@
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Lock, Eye, EyeOff, User } from "lucide-react";
+import { Lock, Eye, EyeOff, User, Mail, ArrowRight } from "lucide-react";
 import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
+import AuthShell, { fieldCls, iconCls, labelCls } from "../AuthShell";
 
 function LoginForm() {
   const router = useRouter();
@@ -40,55 +40,83 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 py-10 bg-cream-50">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-brand shadow-lg mb-4">
-            <User className="w-8 h-8 text-white" />
+    <AuthShell>
+      <div className="text-center md:text-left mb-8">
+        <div className="hidden md:inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-300 to-brand-600 shadow-lg shadow-brand-500/30 mb-5">
+          <User className="w-7 h-7 text-white" />
+        </div>
+        <h1 className="font-display text-3xl font-bold text-maroon-700">
+          Welcome <span className="italic font-normal text-gradient">back</span>
+        </h1>
+        <p className="text-gray-500 text-sm mt-1">Sign in to your PrintsBazar account</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <label htmlFor="login-email" className={labelCls}>Email</label>
+          <div className="relative">
+            <Mail className={iconCls} />
+            <input
+              id="login-email"
+              type="email"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              className={fieldCls}
+            />
           </div>
-          <h1 className="font-display text-2xl font-bold text-gray-800">Welcome back</h1>
-          <p className="text-gray-500 text-sm mt-1">Sign in to your PrintsBazar account</p>
+        </div>
+        <div>
+          <label htmlFor="login-password" className={labelCls}>Password</label>
+          <div className="relative">
+            <Lock className={iconCls} />
+            <input
+              id="login-password"
+              type={showPass ? "text" : "password"}
+              required
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className={`${fieldCls} pr-12`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPass(!showPass)}
+              aria-label={showPass ? "Hide password" : "Show password"}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brand-600 transition-colors"
+            >
+              {showPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="card p-8 space-y-4">
-          <Input label="Email" type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
-            <div className="relative">
-              <input
-                type={showPass ? "text" : "password"}
-                required
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="input pr-11"
-              />
-              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                {showPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
+        {error && (
+          <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-100 rounded-2xl px-4 py-3">
+            <Lock className="w-4 h-4 flex-shrink-0" /> {error}
           </div>
+        )}
 
-          {error && (
-            <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
-              <Lock className="w-4 h-4 flex-shrink-0" /> {error}
-            </div>
-          )}
+        <Button type="submit" size="lg" className="w-full rounded-full shadow-lg shadow-brand-500/30" loading={loading}>
+          {loading ? "Signing in…" : <>Sign In <ArrowRight className="w-5 h-5" /></>}
+        </Button>
+      </form>
 
-          <Button type="submit" size="lg" className="w-full rounded-2xl" loading={loading}>
-            {loading ? "Signing in…" : "Sign In"}
-          </Button>
-        </form>
-
-        <p className="text-center text-sm text-gray-500 mt-6">
-          New here?{" "}
-          <Link href="/account/signup" className="text-brand-600 font-medium hover:text-brand-700">
-            Create an account
-          </Link>
-        </p>
+      <div className="flex items-center gap-3 my-7">
+        <span className="h-px flex-1 bg-cream-200" />
+        <span className="text-xs text-gray-400">New here?</span>
+        <span className="h-px flex-1 bg-cream-200" />
       </div>
-    </div>
+
+      <Link
+        href="/account/signup"
+        className="flex items-center justify-center gap-2 w-full rounded-full border-2 border-maroon-700 py-3 text-sm font-semibold text-maroon-700 transition-colors hover:bg-maroon-700 hover:text-white"
+      >
+        Create an account
+      </Link>
+    </AuthShell>
   );
 }
 

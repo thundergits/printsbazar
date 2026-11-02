@@ -2,9 +2,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Lock, Eye, EyeOff, User } from "lucide-react";
+import { Lock, Eye, EyeOff, User, UserPlus, Mail, Phone, ArrowRight } from "lucide-react";
 import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
+import AuthShell, { fieldCls, iconCls, labelCls } from "../AuthShell";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -41,57 +41,115 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 py-10 bg-cream-50">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-brand shadow-lg mb-4">
-            <User className="w-8 h-8 text-white" />
+    <AuthShell>
+      <div className="text-center md:text-left mb-7">
+        <div className="hidden md:inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-300 to-brand-600 shadow-lg shadow-brand-500/30 mb-5">
+          <UserPlus className="w-7 h-7 text-white" />
+        </div>
+        <h1 className="font-display text-3xl font-bold text-maroon-700">
+          Create your <span className="italic font-normal text-gradient">account</span>
+        </h1>
+        <p className="text-gray-500 text-sm mt-1">Track orders & save your addresses</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="signup-name" className={labelCls}>Full Name</label>
+          <div className="relative">
+            <User className={iconCls} />
+            <input
+              id="signup-name"
+              required
+              autoComplete="name"
+              value={form.name}
+              onChange={update("name")}
+              placeholder="Priya Sharma"
+              className={fieldCls}
+            />
           </div>
-          <h1 className="font-display text-2xl font-bold text-gray-800">Create your account</h1>
-          <p className="text-gray-500 text-sm mt-1">Track orders & save your addresses</p>
+        </div>
+        <div>
+          <label htmlFor="signup-email" className={labelCls}>Email</label>
+          <div className="relative">
+            <Mail className={iconCls} />
+            <input
+              id="signup-email"
+              type="email"
+              required
+              autoComplete="email"
+              value={form.email}
+              onChange={update("email")}
+              placeholder="you@example.com"
+              className={fieldCls}
+            />
+          </div>
+        </div>
+        <div>
+          <label htmlFor="signup-phone" className={labelCls}>
+            Mobile Number <span className="normal-case tracking-normal font-normal text-gray-400">(optional)</span>
+          </label>
+          <div className="relative">
+            <Phone className={iconCls} />
+            <input
+              id="signup-phone"
+              type="tel"
+              autoComplete="tel"
+              value={form.phone}
+              onChange={update("phone")}
+              placeholder="9876543210"
+              className={fieldCls}
+            />
+          </div>
+        </div>
+        <div>
+          <label htmlFor="signup-password" className={labelCls}>Password</label>
+          <div className="relative">
+            <Lock className={iconCls} />
+            <input
+              id="signup-password"
+              type={showPass ? "text" : "password"}
+              required
+              minLength={8}
+              autoComplete="new-password"
+              value={form.password}
+              onChange={update("password")}
+              placeholder="At least 8 characters"
+              className={`${fieldCls} pr-12`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPass(!showPass)}
+              aria-label={showPass ? "Hide password" : "Show password"}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brand-600 transition-colors"
+            >
+              {showPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="card p-8 space-y-4">
-          <Input label="Full Name" required value={form.name} onChange={update("name")} placeholder="Priya Sharma" />
-          <Input label="Email" type="email" required autoComplete="email" value={form.email} onChange={update("email")} placeholder="you@example.com" />
-          <Input label="Mobile Number (optional)" type="tel" value={form.phone} onChange={update("phone")} placeholder="9876543210" />
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
-            <div className="relative">
-              <input
-                type={showPass ? "text" : "password"}
-                required
-                minLength={8}
-                autoComplete="new-password"
-                value={form.password}
-                onChange={update("password")}
-                placeholder="At least 8 characters"
-                className="input pr-11"
-              />
-              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                {showPass ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
+        {error && (
+          <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-100 rounded-2xl px-4 py-3">
+            <Lock className="w-4 h-4 flex-shrink-0" /> {error}
           </div>
+        )}
 
-          {error && (
-            <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
-              <Lock className="w-4 h-4 flex-shrink-0" /> {error}
-            </div>
-          )}
+        <Button type="submit" size="lg" className="w-full rounded-full shadow-lg shadow-brand-500/30 !mt-6" loading={loading}>
+          {loading ? "Creating account…" : <>Create Account <ArrowRight className="w-5 h-5" /></>}
+        </Button>
+      </form>
 
-          <Button type="submit" size="lg" className="w-full rounded-2xl" loading={loading}>
-            {loading ? "Creating account…" : "Create Account"}
-          </Button>
-        </form>
-
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Already have an account?{" "}
-          <Link href="/account/login" className="text-brand-600 font-medium hover:text-brand-700">
-            Sign in
-          </Link>
-        </p>
+      <div className="flex items-center gap-3 my-6">
+        <span className="h-px flex-1 bg-cream-200" />
+        <span className="text-xs text-gray-400">Already have an account?</span>
+        <span className="h-px flex-1 bg-cream-200" />
       </div>
-    </div>
+
+      <Link
+        href="/account/login"
+        className="flex items-center justify-center gap-2 w-full rounded-full border-2 border-maroon-700 py-3 text-sm font-semibold text-maroon-700 transition-colors hover:bg-maroon-700 hover:text-white"
+      >
+        Sign in
+      </Link>
+    </AuthShell>
   );
 }

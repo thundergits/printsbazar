@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { ShoppingCart, Menu, X, Search, Phone, Truck, User } from "lucide-react";
+import { ShoppingCart, Menu, X, Phone, Truck, User } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -82,13 +82,6 @@ export default function Header({ user }: HeaderProps) {
 
             {/* Right actions */}
             <div className="flex items-center gap-2">
-              <button
-                aria-label="Search"
-                className="hidden sm:flex w-9 h-9 items-center justify-center rounded-lg hover:bg-white/5 text-gray-300 hover:text-brand-400 transition-colors"
-              >
-                <Search className="w-5 h-5" />
-              </button>
-
               <Link
                 href={user ? "/account" : "/account/login"}
                 className="hidden sm:flex w-9 h-9 items-center justify-center rounded-lg hover:bg-white/5 text-gray-300 hover:text-brand-400 transition-colors"
